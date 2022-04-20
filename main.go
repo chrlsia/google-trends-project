@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/xml"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"os"
 )
@@ -41,8 +42,19 @@ func getGoogleTrends() *http.Response {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+
+	return resp
 }
 
 func readGoogleTrends() []byte {
-	getGoogleTrends
+	resp:= getGoogleTrends()
+	data, err:=ioutil.ReadAll(resp.Body)
+
+	if err!=nil{
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	return data
+
 }
