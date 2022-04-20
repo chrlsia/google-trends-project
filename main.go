@@ -21,8 +21,8 @@ type RSS struct {
 }
 
 type Channel struct {
-	Title    string `xml."title"`
-	ItemList []Item `xml."item"`
+	Title    string `xml:"title"`
+	ItemList []Item `xml:"item"`
 }
 type News struct {
 	Headline     string `xml:"news_item_title"`
@@ -33,6 +33,16 @@ func main() {
 	var r RSS
 
 	data:= readGoogleTrends()
+	//fmt.Println(string(data)) data are in XML format
+
+	err:=xml.Unmarshal(data,&r)
+
+	if err!=nil{
+		fmt.Println("error:",err)
+		os.Exit(1)
+	}
+
+
 }
 
 func getGoogleTrends() *http.Response {
