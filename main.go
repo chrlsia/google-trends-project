@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/xml"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"os"
 )
@@ -30,13 +29,20 @@ type News struct {
 }
 
 func main() {
-	readGoogleTrends
+	var r RSS
+
+	data:= readGoogleTrends()
 }
 
-func readGoogleTrends() {
+func getGoogleTrends() *http.Response {
+	resp,err:=http.Get("https://trends.google.com/trends/trendingsearches/daily/rss?geo=US")
+
+	if err!=nil{
+		fmt.Println(err)
+		os.Exit(1)
+	}
+}
+
+func readGoogleTrends() []byte {
 	getGoogleTrends
-}
-
-func getGoogleTrends() {
-
 }
