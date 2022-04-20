@@ -32,23 +32,36 @@ type News struct {
 func main() {
 	var r RSS
 
-	data:= readGoogleTrends()
+	data := readGoogleTrends()
 	//fmt.Println(string(data)) data are in XML format
 
-	err:=xml.Unmarshal(data,&r)
+	err := xml.Unmarshal(data, &r)
 
-	if err!=nil{
-		fmt.Println("error:",err)
+	if err != nil {
+		fmt.Println("error:", err)
 		os.Exit(1)
 	}
 
+	fmt.Println("\nHere are the Google search trends for today")
+	fmt.Println("-------------------------------------------")
+
+	// print out the results
+	for i := range r.Channel.ItemList {
+		rank := (i + 1)
+		fmt.Println("#", rank)
+		fmt.Println("Search Term:", r.Channel.ItemList[i].Title)
+		fmt.Println("Link to trend:", r.Channel.ItemList[i].Link)
+		fmt.Println("Headline:", r.Channel.ItemList[i].NewsItems[0].Headline)
+		fmt.Println("Link to article:", r.Channel.ItemList[i].NewsItems[0].HeadlineLink)
+		fmt.Println("--------------------------")
+	}
 
 }
 
 func getGoogleTrends() *http.Response {
-	resp,err:=http.Get("https://trends.google.com/trends/trendingsearches/daily/rss?geo=US")
+	resp, err := http.Get("https://trends.google.com/trends/trendingsearches/daily/rss?geo=US")
 
-	if err!=nil{
+	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
@@ -57,10 +70,10 @@ func getGoogleTrends() *http.Response {
 }
 
 func readGoogleTrends() []byte {
-	resp:= getGoogleTrends()
-	data, err:=ioutil.ReadAll(resp.Body)
+	resp := getGoogleTrends()
+	data, err := ioutil.ReadAll(resp.Body)
 
-	if err!=nil{
+	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
