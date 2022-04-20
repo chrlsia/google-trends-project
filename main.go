@@ -15,6 +15,15 @@ type Item struct {
 	NewsItems []News
 }
 
+type RSS struct{
+	XMLName xml.Name
+	Channel *Channel
+}
+
+type Channel struct{
+	Title	string
+	ItemList []Item
+}
 type News struct {
 	Headline     string
 	HeadlineLink string
